@@ -3,7 +3,7 @@ services:
   app:
     container_name: "app"
     env_file:
-      - ./app/.env
+      - .env
     build:
       context: ./app
       dockerfile: Dockerfile
