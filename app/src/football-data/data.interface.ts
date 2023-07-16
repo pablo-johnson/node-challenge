@@ -30,7 +30,7 @@ export interface Team {
   id: number,
   name: string,
   tla: string,
-  shortname: string,
+  shortName: string,
   area: Area,
   address: string,
   squad: Player[],
