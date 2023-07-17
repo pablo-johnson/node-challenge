@@ -35,7 +35,7 @@ export class TeamsService {
       savedTeam.competitions = [competition];
       await this.teamRepository.save(savedTeam);
 
-      const coachDto = { ...createTeamDto.coach, team: savedTeam };
+      const coachDto = { ...createTeamDto.coach, team: savedTeam, oldId: createTeamDto.id};
       await this.coachesService.saveCoach(coachDto);
 
       await this.playersService.savePlayers(createTeamDto.squad, savedTeam);

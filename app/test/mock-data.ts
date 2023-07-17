@@ -39,10 +39,7 @@ export const mockedTeam: Team = {
   coach: mockedCoach,
 }
 
-export const mockedCompetitionTeams: CompetitionTeamsResponse = {
-  competition: mockedCompetition,
-  teams: [mockedTeam],
-}export const mockedCoachInputData: CreateCoachDto = {
+export const mockedCoachInputData: CreateCoachDto = {
   oldId: 1,
   name: 'mockedName',
   dateOfBirth: 'mockedDate',
