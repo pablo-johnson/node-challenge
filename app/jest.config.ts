@@ -2,10 +2,13 @@ module.exports = {
   collectCoverageFrom: [
     "**/*.(t|j)s"
   ],
+  // collectCoverage: true,
   coverageDirectory: "../coverage",
   coveragePathIgnorePatterns: [
     '.interface.ts',
     '.module.ts',
+    '.dto.ts',
+    '.entity.ts',
   ],
   coverageReporters: ['cobertura', 'lcov', 'text', 'text-summary'],
   moduleFileExtensions: [
