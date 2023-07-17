@@ -2,13 +2,17 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FootballDataModule } from './football-data/football-data.module';
-import { CompetitionsModule } from './competitions/competitions.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CompetitionsModule } from './competitions/competitions.module';
 import { Competition } from './competitions/competition.entity';
 import { CoachesModule } from './coaches/coaches.module';
 import { Coach } from './coaches/coach.entity';
+import { TeamsModule } from './teams/teams.module';
+import { Team } from './teams/team.entity';
+import { PlayersModule } from './players/players.module';
+import { Player } from './players/player.entity';
 
 @Module({
   controllers: [AppController],
@@ -26,11 +30,13 @@ import { Coach } from './coaches/coach.entity';
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
-        entities: [Competition, Coach],
+        entities: [Competition, Team, Player, Coach],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    CoachesModule,],
+    CoachesModule,
+    TeamsModule,
+    PlayersModule,],
 })
 export class AppModule { }

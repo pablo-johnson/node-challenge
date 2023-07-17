@@ -16,7 +16,7 @@ export class CoachesService {
 
   async saveCoach(createCouchDto: CreateCoachDto): Promise<Coach> {
     this.logger.log("saveCoach called");
-    const createdCoach: Coach = await this.couchRepository.save(createCouchDto);
+    const createdCoach: Coach = await this.couchRepository.save({ ...createCouchDto, oldId: createCouchDto.id });
     return createdCoach;
   }
 }

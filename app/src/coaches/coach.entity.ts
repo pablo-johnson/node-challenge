@@ -1,9 +1,13 @@
-import { Entity, Column, PrimaryColumn, JoinTable, ManyToMany } from 'typeorm';
+import { Team } from '../teams/team.entity';
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity()
 export class Coach {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ nullable: true })
+  oldId: number
 
   @Column({ nullable: true })
   name: string;
@@ -13,5 +17,9 @@ export class Coach {
 
   @Column({ nullable: true })
   nationality: string;
+
+  @OneToOne(() => Team)
+  @JoinColumn({ name: 'team_id' })
+  team?: Team;
 
 }

@@ -4,7 +4,7 @@ import { FootballDataService } from '../football-data/football-data.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Competition } from './competition.entity';
-
+import { TeamsService } from '../teams/teams.service';
 
 
 @Injectable()
@@ -14,7 +14,8 @@ export class CompetitionsService {
   constructor(
     private readonly footballDataService: FootballDataService,
     @InjectRepository(Competition)
-    private competitionRepository: Repository<Competition>,) { }
+    private competitionRepository: Repository<Competition>,
+    private teamService: TeamsService,) { }
 
   async fetchLeagueWithTeamsAndPlayers(leagueName: string) {
 
@@ -22,12 +23,13 @@ export class CompetitionsService {
       .footballDataService.getLeague(leagueName);
 
 
-    const { teams, competition: competitionData }: CompetitionTeamsResponse = await this
+    const { teams, competition: competitionInfo }: CompetitionTeamsResponse = await this
       .footballDataService.getLeagueTeams(leagueName);
 
-    const competitionDto = { ...competitionData, areaName: competition.area.name };
+    const competitionDto = { ...competitionInfo, areaName: competition.area.name };
     const savedCompetition = await this.competitionRepository.save(competitionDto);
-    this.logger.log(savedCompetition);
+    await this.teamService.saveTeams(teams, savedCompetition);
+    
 
 
   }
