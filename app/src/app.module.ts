@@ -35,6 +35,10 @@ import { ThrottlerModule } from '@nestjs/throttler';
       }),
       inject: [ConfigService],
     }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 15,
+    }),
     CoachesModule,
     TeamsModule,
     PlayersModule,
@@ -42,10 +46,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
       driver: ApolloDriver,
       playground: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-    }),
-    ThrottlerModule.forRoot({
-      ttl: 60,
-      limit: 15,
     }),
   ],
 })

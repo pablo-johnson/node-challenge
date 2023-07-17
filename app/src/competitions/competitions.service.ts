@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CompetitionTeamsResponse } from '../football-data/data.interface';
 import { FootballDataService } from '../football-data/football-data.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -46,6 +46,9 @@ export class CompetitionsService {
       where: filter,
       relations: ['teams'],
     })
+    if (!league) {
+      throw new HttpException(`LEAGUE ${leagueCode} NOT FOUND`, HttpStatus.NOT_FOUND);
+    }
     const teamIds = league.teams.map(team => { return team.id });
     const players: Player[] = await this.playerService.getPlayersByTeamIds(teamIds);
     return players;
