@@ -1,9 +1,9 @@
+import { Team } from "src/teams/team.entity";
+
 export class CreateCoachDto {
-  id?: number;
-
+  oldId?: number;
   name?: string;
-
   dateOfBirth?: string;
-
   nationality?: string;
+  team?: Team;
 }

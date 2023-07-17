@@ -7,16 +7,16 @@ export class Coach {
   id: number;
 
   @Column({ nullable: true })
-  oldId: number
+  oldId?: number
 
   @Column({ nullable: true })
-  name: string;
+  name?: string;
 
   @Column({ nullable: true })
-  dateOfBirth: string;
+  dateOfBirth?: string;
 
   @Column({ nullable: true })
-  nationality: string;
+  nationality?: string;
 
   @OneToOne(() => Team)
   @JoinColumn({ name: 'team_id' })

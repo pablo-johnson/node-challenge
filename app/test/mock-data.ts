@@ -42,4 +42,9 @@ export const mockedTeam: Team = {
 export const mockedCompetitionTeams: CompetitionTeamsResponse = {
   competition: mockedCompetition,
   teams: [mockedTeam],
-}
+}export const mockedCoachInputData: CreateCoachDto = {
+  oldId: 1,
+  name: 'mockedName',
+  dateOfBirth: 'mockedDate',
+  nationality: 'mockedNationality',
+};
