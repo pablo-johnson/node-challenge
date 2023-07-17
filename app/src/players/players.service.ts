@@ -33,7 +33,7 @@ export class PlayersService {
 
     return savedPlayers;
   }
-  async getPlayersByTeamId(teamIds: number[]): Promise<Player[]> {
+  async getPlayersByTeamIds(teamIds: number[]): Promise<Player[]> {
     this.logger.log(`Get players from teamId: ${teamIds}`);
     const players: Player[] = await this.playerRepository.find({
       where: {

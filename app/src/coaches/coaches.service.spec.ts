@@ -40,5 +40,21 @@ describe('CoachesService', () => {
       expect(coachRepository.save).toBeCalledTimes(1);
       expect(result).toEqual({ ...mockedCoachCreateDto, team: mockedTeam, id: 1 })
     })
-  })
+  });
+
+  describe('getCoachByTeamIds', () => {
+    it("should retrieve the coach from the given team id", async () => {
+      const teamId = 1;
+      jest
+        .spyOn(coachRepository, 'find')
+        .mockResolvedValue([mockedTeam]);
+
+      const result = await service.getCoachByTeamIds([teamId]);
+
+      expect(coachRepository.find).toBeCalledWith({
+        where: { team: { id: In([teamId]) } }
+      });
+      expect(result).toEqual([mockedTeam])
+    })
+  });
 });

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Team } from './team.entity';
 import { CreateTeamDto } from './dtos/create-team.dto';
 import { Competition } from 'src/competitions/competition.entity';
@@ -63,23 +63,23 @@ export class TeamsService {
 
     return savedTeams;
   }
-  async findByName(teamName: string): Promise<Team> {
+  async getByName(teamName: string): Promise<Team> {
     this.logger.log(`findByName: looking for team ${teamName}`)
     const team: Team = await this.teamRepository.findOne({
       where: {
-        name: teamName
+        name: Like(`%${teamName}%`)
       },
       relations: {
-        // players: true,
+        players: true,
         competitions: true,
       },
     });
     return team;
   }
 
-  async getPlayersOrCoachByTeamId(teamIds: number[]): Promise<Player[] | Coach[]> {
-    this.logger.log("getPlayersOrCoachByTeamId");
-    const players: Player[] = await this.playersService.getPlayersByTeamId(teamIds);
+  async getPlayersOrCoachByTeamIds(teamIds: number[]): Promise<Player[] | Coach[]> {
+    this.logger.log("getPlayersOrCoachByTeamIds");
+    const players: Player[] = await this.playersService.getPlayersByTeamIds(teamIds);
     if (players != null && players.length > 0) {
       this.logger.log("found players")
       return players;

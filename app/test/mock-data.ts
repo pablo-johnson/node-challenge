@@ -1,5 +1,6 @@
+import { Coach } from "src/coaches/coach.entity";
 import { CreateCoachDto } from "src/coaches/dtos/create-coach.dto";
-import { Area, Coach, Competition } from "src/football-data/data.interface";
+import { Area, Competition } from "src/football-data/data.interface";
 import { CreatePlayerDto } from "src/players/dtos/create-player.dto";
 import { Player } from "src/players/player.entity";
 import { CreateTeamDto } from "src/teams/dtos/create-team.dto";

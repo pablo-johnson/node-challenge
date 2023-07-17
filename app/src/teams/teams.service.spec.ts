@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { TeamsService } from './teams.service';
 import { PlayersService } from '../players/players.service';
 import { Team } from './team.entity';
 import { CoachesService } from '../coaches/coaches.service';
-import { mockedCompetition, mockedTeam, mockedTeamCreateDto } from '../../test/mock-data';
+import { mockedCoach, mockedCompetition, mockedPlayer, mockedTeam, mockedTeamCreateDto } from '../../test/mock-data';
 
 describe('TeamsService', () => {
   let service: TeamsService;
@@ -20,6 +20,7 @@ describe('TeamsService', () => {
           provide: PlayersService,
           useFactory: () => ({
             savePlayers: jest.fn(),
+            getPlayersByTeamIds: jest.fn(),
           }),
         },
         {
@@ -30,6 +31,7 @@ describe('TeamsService', () => {
           provide: CoachesService,
           useFactory: () => ({
             saveCoach: jest.fn(),
+            getCoachByTeamIds: jest.fn(),
           }),
         },
       ],
@@ -113,4 +115,64 @@ describe('TeamsService', () => {
 
     })
   })
+
+  describe('getByName', () => {
+    it("should retrieve a team by the given name", async () => {
+
+      const teamName = "Arsenal FC";
+      const retrievedTeam = { ...mockedTeam, name: teamName };
+
+      jest
+        .spyOn(teamsRepository, 'findOne')
+        .mockResolvedValueOnce(retrievedTeam);
+
+      const result = await service.getByName(teamName);
+
+      expect(teamsRepository.findOne).toHaveBeenCalledWith(
+        {
+          where: { name: Like(`%${teamName}%`) },
+          relations: {
+            players: true,
+            competitions: true,
+          },
+        }
+      );
+      expect(result).toEqual(retrievedTeam)
+
+    })
+  });
+
+  describe('getPlayersOrCoachByTeamIds', () => {
+    it('should call playersService.getPlayersByTeamIds and retrieve all the players that are part of the team id', async () => {
+      const teamId = 1;
+      const players = [mockedPlayer, mockedPlayer]
+
+      jest
+        .spyOn(playersService, 'getPlayersByTeamIds')
+        .mockResolvedValueOnce(players);
+
+      const result = await service.getPlayersOrCoachByTeamIds([teamId]);
+
+      expect(playersService.getPlayersByTeamIds).toHaveBeenCalledWith([teamId]);
+      expect(result).toEqual(players);
+    });
+
+    it('should call coachesService.getCoachByTeamIds and retrieve the coach when there are no players in the team', async () => {
+      const teamId = 1;
+      const players = []
+
+      jest
+        .spyOn(playersService, 'getPlayersByTeamIds')
+        .mockResolvedValueOnce(players);
+
+      jest
+        .spyOn(coachesService, 'getCoachByTeamIds')
+        .mockResolvedValueOnce([mockedCoach]);
+
+      const result = await service.getPlayersOrCoachByTeamIds([teamId]);
+
+      expect(playersService.getPlayersByTeamIds).toHaveBeenCalledWith([teamId]);
+      expect(result).toEqual([mockedCoach]);
+    });
+  });
 });

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PlayersService } from './players.service';
 import { Player } from './player.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CoachesService } from '../coaches/coaches.service';
 import { mockedPlayerCreateDto, mockedPlayer, mockedTeam } from '../../test/mock-data';
 
@@ -58,6 +58,24 @@ describe('PlayersService', () => {
 
       expect(playersRepository.save).toBeCalledTimes(2);
       expect(result).toEqual([mockedPlayer, mockedPlayer])
+    })
+  });
+
+  describe('getPlayersByTeamIds', () => {
+    it("should retrieve all the players from the given club id", async () => {
+      const teamId = 1;
+      jest
+        .spyOn(playersRepository, 'find')
+        .mockImplementation(
+          jest.fn(() => Promise.resolve([mockedPlayer, mockedPlayer, mockedPlayer])),
+        );
+
+      const result = await service.getPlayersByTeamIds([teamId]);
+
+      expect(playersRepository.find).toBeCalledWith(
+        { where: { team: { id: In([teamId]) } } }
+      );
+      expect(result).toEqual([mockedPlayer, mockedPlayer, mockedPlayer])
     })
   })
 });
