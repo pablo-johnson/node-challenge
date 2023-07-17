@@ -23,7 +23,7 @@ The goal is to create a project that exposes an API built with GraphQL, with a m
 
 - Clone the code
 - Change the file `.env.template` to `.env`.
-  - Get a Football-data API key from [here]([https://docs.nestjs.com/support](https://www.football-data.org/))
+  - Get a Football-data API key from [here]([https://www.football-data.org/])
   - Replace the value of `FOOTBALL_API_TOKEN` in the `.env` file
   - Set appropriate values for `POSTGRES_USER` and `POSTGRES_PASSWORD`
 - Execute
@@ -39,18 +39,21 @@ The goal is to create a project that exposes an API built with GraphQL, with a m
 
 ```bash
 # unit tests
-$ npm run test
+$ docker exec -it app sh -c "npm run test"
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Support
+## Decision Making
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Web Framework
+
+The decision to use [Nest]([https://www.nestjs.com]) as a web framework was because it is an open-source framework with a lot of adoption in the market, the documentation is of great quality, and it is easy to learn, especially for people who have a background in Angular. It is based on Express, a widely used framework, but also allows us to replace it with Fastify, another new framework. 
+It also provides a fast and easy integration with ORMs such as TypeOrm, Prisma, Knex.js, and others. It also provides great ease to implement GraphQL through Apollo. It is a modern and versatile framework for different circumstances.
+
+### Dependency Manager
+
+NPM 
+
 
 ## Stay in touch
 
