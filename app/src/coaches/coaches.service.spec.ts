@@ -3,7 +3,7 @@ import { CoachesService } from './coaches.service';
 import { In, Repository } from 'typeorm';
 import { Coach } from './coach.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { mockedCoachCreateDto, mockedTeam } from '../../test/mock-data';
+import { mockedCoachInputData, mockedTeam } from '../../test/mock-data';
 
 describe('CoachesService', () => {
   let service: CoachesService;
@@ -32,13 +32,13 @@ describe('CoachesService', () => {
       jest
         .spyOn(coachRepository, 'save')
         .mockImplementation(
-          jest.fn(() => Promise.resolve({ ...mockedCoachCreateDto, team: mockedTeam, id: 1 })),
+          jest.fn(() => Promise.resolve({ ...mockedCoachInputData, team: mockedTeam, id: 1 })),
         );
 
-      const result = await service.saveCoach(mockedCoachCreateDto);
+      const result = await service.saveCoach(mockedCoachInputData);
 
       expect(coachRepository.save).toBeCalledTimes(1);
-      expect(result).toEqual({ ...mockedCoachCreateDto, team: mockedTeam, id: 1 })
+      expect(result).toEqual({ ...mockedCoachInputData, team: mockedTeam, id: 1 })
     })
   })
 });

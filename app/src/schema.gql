@@ -1,0 +1,70 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Player {
+  """Player Id"""
+  id: Int
+
+  """Player name"""
+  name: String
+
+  """Player dateOfBirth"""
+  dateOfBirth: String
+
+  """Player position"""
+  position: String
+
+  """Player nationality"""
+  nationality: String
+
+  """Player team"""
+  team: Team
+}
+
+type Team {
+  """Team Id"""
+  id: Int
+
+  """Team name"""
+  name: String
+
+  """Team tla"""
+  tla: String
+
+  """Team shortname"""
+  shortName: String
+
+  """Team areaName"""
+  areaName: String
+
+  """Team address"""
+  address: String
+
+  """Team players"""
+  players: [Player]
+
+  """Team competitions"""
+  competitions: [Competition!]
+}
+
+type Competition {
+  """Competition Id"""
+  id: Int
+
+  """Competition name"""
+  name: String
+
+  """Competition code"""
+  code: String
+
+  """Competition areaName"""
+  areaName: String
+
+  """Competition name"""
+  teams: [Team!]
+}
+
+type Query {
+  team(teamName: String!): Team
+}

@@ -6,6 +6,8 @@ import { CreateTeamDto } from './dtos/create-team.dto';
 import { Competition } from 'src/competitions/competition.entity';
 import { PlayersService } from '../players/players.service';
 import { CoachesService } from '../coaches/coaches.service';
+import { Player } from 'src/players/player.entity';
+import { Coach } from 'src/coaches/coach.entity';
 
 @Injectable()
 export class TeamsService {
@@ -60,6 +62,31 @@ export class TeamsService {
     this.logger.log(`${createTeamDtos.length} teams from ${competition.name} successfyle saved`);
 
     return savedTeams;
+  }
+  async findByName(teamName: string): Promise<Team> {
+    this.logger.log(`findByName: looking for team ${teamName}`)
+    const team: Team = await this.teamRepository.findOne({
+      where: {
+        name: teamName
+      },
+      relations: {
+        // players: true,
+        competitions: true,
+      },
+    });
+    return team;
+  }
+
+  async getPlayersOrCoachByTeamId(teamIds: number[]): Promise<Player[] | Coach[]> {
+    this.logger.log("getPlayersOrCoachByTeamId");
+    const players: Player[] = await this.playersService.getPlayersByTeamId(teamIds);
+    if (players != null && players.length > 0) {
+      this.logger.log("found players")
+      return players;
+    }
+    this.logger.log("No players found");
+    const coaches: Coach[] = await this.coachesService.getCoachByTeamIds(teamIds);
+    return coaches;
   }
 
 }

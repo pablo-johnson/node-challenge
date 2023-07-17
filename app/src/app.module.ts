@@ -13,6 +13,9 @@ import { TeamsModule } from './teams/teams.module';
 import { Team } from './teams/team.entity';
 import { PlayersModule } from './players/players.module';
 import { Player } from './players/player.entity';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
 
 @Module({
   controllers: [AppController],
@@ -37,6 +40,12 @@ import { Player } from './players/player.entity';
     }),
     CoachesModule,
     TeamsModule,
-    PlayersModule,],
+    PlayersModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      playground: true,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
+  ],
 })
 export class AppModule { }

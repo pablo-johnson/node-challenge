@@ -1,9 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Player } from './player.entity';
 import { CreatePlayerDto } from './dtos/create-player.dto';
 import { Team } from 'src/teams/team.entity';
+import { Coach } from 'src/coaches/coach.entity';
 
 @Injectable()
 export class PlayersService {
@@ -31,6 +32,15 @@ export class PlayersService {
     this.logger.log(`${createPlayersDtos.length} teams from ${team.name} successfyle saved`);
 
     return savedPlayers;
+  }
+  async getPlayersByTeamId(teamIds: number[]): Promise<Player[]> {
+    this.logger.log(`Get players from teamId: ${teamIds}`);
+    const players: Player[] = await this.playerRepository.find({
+      where: {
+        team: { id: In(teamIds) }
+      }
+    })
+    return players;
   }
 
 
