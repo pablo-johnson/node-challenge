@@ -10,7 +10,7 @@ export const mockedCompetition: Competition = {
   id: 1,
   name: 'mockedName',
   code: 'mockedCode',
-  area: mockedArea,
+  areaName: 'mockedAreaName',
 }
 
 export const mockedPlayer: Player = {

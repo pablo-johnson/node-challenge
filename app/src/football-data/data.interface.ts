@@ -4,11 +4,12 @@ export interface Area {
   code: string,
 }
 
-export interface Competition {
-  id: number,
-  name: string,
-  code: string,
-  area: Area,
+export class Competition {
+  id: number;
+  name: string;
+  code: string;
+  areaName: string;
+  area?: Area;
 }
 
 export interface Player {
@@ -20,10 +21,10 @@ export interface Player {
 }
 
 export interface Coach {
-  id: number,
-  name: string,
-  dateOfBirth: string,
-  nationality: string,
+  id?: number,
+  name?: string,
+  dateOfBirth?: string,
+  nationality?: string,
 }
 
 export interface Team {

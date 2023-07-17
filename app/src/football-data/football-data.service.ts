@@ -1,10 +1,12 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { Competition, CompetitionTeamsResponse } from './data.interface';
 
 @Injectable()
 export class FootballDataService {
+
+  private readonly logger = new Logger('FootballData Service');
 
   constructor(private readonly httpService: HttpService) { }
 
