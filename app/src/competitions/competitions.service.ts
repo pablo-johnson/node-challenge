@@ -18,7 +18,7 @@ export class CompetitionsService {
     private teamService: TeamsService,) { }
 
   async fetchLeagueWithTeamsAndPlayers(leagueName: string) {
-
+    this.logger.log("fetchLeagueWithTeamsAndPlayers called");
     const competition = await this
       .footballDataService.getLeague(leagueName);
 
@@ -29,8 +29,6 @@ export class CompetitionsService {
     const competitionDto = { ...competitionInfo, areaName: competition.area.name };
     const savedCompetition = await this.competitionRepository.save(competitionDto);
     await this.teamService.saveTeams(teams, savedCompetition);
-    
-
 
   }
 
