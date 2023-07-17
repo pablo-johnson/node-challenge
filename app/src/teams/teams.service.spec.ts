@@ -25,7 +25,7 @@ describe('TeamsService', () => {
         {
           provide: CoachesService,
           useFactory: () => ({
-            saveCouch: jest.fn(),
+            saveCoach: jest.fn(),
           }),
         },
       ],

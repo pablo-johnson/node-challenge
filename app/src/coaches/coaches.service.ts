@@ -11,12 +11,12 @@ export class CoachesService {
 
   constructor(
     @InjectRepository(Coach)
-    private couchRepository: Repository<Coach>,
+    private coachRepository: Repository<Coach>,
   ) { }
 
-  async saveCoach(createCouchDto: CreateCoachDto): Promise<Coach> {
+  async saveCoach(createCoachDto: CreateCoachDto): Promise<Coach> {
     this.logger.log("saveCoach called");
-    const createdCoach: Coach = await this.couchRepository.save(createCouchDto);
+    const createdCoach: Coach = await this.coachRepository.save(createCoachDto);
     return createdCoach;
   }
 }
