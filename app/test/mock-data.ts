@@ -2,6 +2,7 @@ import { CreateCoachDto } from "src/coaches/dtos/create-coach.dto";
 import { Area, Coach, Competition } from "src/football-data/data.interface";
 import { CreatePlayerDto } from "src/players/dtos/create-player.dto";
 import { Player } from "src/players/player.entity";
+import { CreateTeamDto } from "src/teams/dtos/create-team.dto";
 import { Team } from "src/teams/team.entity";
 
 export const mockedArea: Area = {
@@ -48,6 +49,18 @@ export const mockedTeam: Team = {
   areaName: mockedArea.name,
   address: "mockedAdress",
   players: [mockedPlayer, mockedPlayer, mockedPlayer],
+}
+
+export const mockedTeamCreateDto: CreateTeamDto = {
+  id: 1,
+  name: "mockedTeam",
+  tla: "mockedTla",
+  shortName: "mockedShortName",
+  areaName: mockedArea.name,
+  area: mockedArea,
+  address: "mockedAdress",
+  squad: [mockedPlayer, mockedPlayer, mockedPlayer],
+  coach: mockedCoach
 }
 
 export const mockedCoachCreateDto: CreateCoachDto = {

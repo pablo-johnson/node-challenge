@@ -29,13 +29,16 @@ export class TeamsService {
 
     let savedTeam: Team;
     if (teamInDb) {
-
+      if (!teamInDb.competitions.find(teamCompetition => teamCompetition.id == competition.id)) {
+        teamInDb.competitions.push(competition);
+        savedTeam = await this.teamRepository.save(teamInDb);
+      }
     } else {
-      savedTeam = await this.teamRepository.save(createTeamDto);
+      savedTeam = this.teamRepository.create(createTeamDto);
       savedTeam.competitions = [competition];
-      await this.teamRepository.save(savedTeam);
+      savedTeam = await this.teamRepository.save(savedTeam);
 
-      const coachDto = { ...createTeamDto.coach, team: savedTeam, oldId: createTeamDto.id};
+      const coachDto = { ...createTeamDto.coach, team: savedTeam, oldId: createTeamDto.id };
       await this.coachesService.saveCoach(coachDto);
 
       await this.playersService.savePlayers(createTeamDto.squad, savedTeam);

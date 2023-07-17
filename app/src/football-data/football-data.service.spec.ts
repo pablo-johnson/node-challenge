@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FootballDataService } from './football-data.service';
 import { HttpService } from '@nestjs/axios';
 import { of } from 'rxjs';
-import { mockedCompetition, mockedCompetitionTeams } from '../../test/mock-data';
+import { mockedArea, mockedCompetition } from '../../test/mock-data';
+
 
 describe('FootballDataService', () => {
   let service: FootballDataService;
@@ -69,15 +70,21 @@ describe('FootballDataService', () => {
         const leagueName = 'PL';
         const endpoint = `competitions/${leagueName}/teams`
 
+
+        const expectedResponse = {
+          ...mockedCompetition,
+          area: mockedArea,
+        };
+
         const fetchSpy = jest
           .spyOn(service, 'fetch')
-          .mockResolvedValue(mockedCompetitionTeams);
+          .mockResolvedValue(expectedResponse);
 
         const result = await service['getLeagueTeams'](leagueName);
 
         expect(fetchSpy).toHaveBeenCalledWith(endpoint);
         expect(fetchSpy).toReturn();
-        expect(result).toEqual(mockedCompetitionTeams);
+        expect(result).toEqual(expectedResponse);
       })
   });
 });
