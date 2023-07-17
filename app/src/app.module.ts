@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Competition } from './competitions/competition.entity';
+import { CoachesModule } from './coaches/coaches.module';
+import { Coach } from './coaches/coach.entity';
 
 @Module({
   controllers: [AppController],
@@ -24,10 +26,11 @@ import { Competition } from './competitions/competition.entity';
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
-        entities: [Competition],
+        entities: [Competition, Coach],
         synchronize: true,
       }),
       inject: [ConfigService],
-    }),],
+    }),
+    CoachesModule,],
 })
 export class AppModule { }
