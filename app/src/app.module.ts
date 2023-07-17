@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { FootballDataModule } from './football-data/football-data.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -18,8 +16,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 
 @Module({
-  controllers: [AppController],
-  providers: [AppService],
   imports: [
     FootballDataModule,
     CompetitionsModule,

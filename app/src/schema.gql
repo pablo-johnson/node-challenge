@@ -65,6 +65,16 @@ type Competition {
   teams: [Team!]
 }
 
+type ImportResponse {
+  """true if the import had success."""
+  success: Boolean!
+}
+
 type Query {
   team(teamName: String!): Team
+  teamsFromCompetition(leagueId: Int!): [Team!]!
+}
+
+type Mutation {
+  importLeague(leagueCode: String!): ImportResponse!
 }

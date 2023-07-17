@@ -16,7 +16,7 @@ describe('TeamsResolver', () => {
         {
           provide: TeamsService,
           useFactory: () => ({
-            findByLeagueId: jest.fn(),
+            getTeamsByLeagueId: jest.fn(),
             getByName: jest.fn(),
             getPlayersOrCoachByTeamIds: jest.fn(),
           }),
@@ -31,8 +31,6 @@ describe('TeamsResolver', () => {
   it('should be defined', () => {
     expect(resolver).toBeDefined();
   });
-
-
 
   describe('getTeam', () => {
     it('should retrieve a team from the DB with the given teamName', async () => {
@@ -76,6 +74,22 @@ describe('TeamsResolver', () => {
 
       expect(teamsService.getPlayersOrCoachByTeamIds).toHaveBeenCalledWith([mockedTeam.id]);
       expect(result).toEqual(expectedPlayers);
+    });
+  });
+
+  describe('teamsFromCompetition', () => {
+    it('should retrieve all teams from the competition parent team is in', async () => {
+      const expectedTeams: Team[] = [mockedTeam, mockedTeam, mockedTeam];
+      const leagueId = 1;
+
+      jest
+        .spyOn(teamsService, 'getTeamsByLeagueId')
+        .mockResolvedValueOnce(expectedTeams);
+
+      const result = await resolver.teamsFromCompetition(leagueId);
+
+      expect(teamsService.getTeamsByLeagueId).toHaveBeenCalledWith(leagueId);
+      expect(result).toEqual(expectedTeams);
     });
   });
 });

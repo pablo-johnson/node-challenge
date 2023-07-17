@@ -175,4 +175,54 @@ describe('TeamsService', () => {
       expect(result).toEqual([mockedCoach]);
     });
   });
+
+  describe('getTeamsByLeagueId', () => {
+    it('should retrieve all the teams from the given league id', async () => {
+      const leagueId = 1;
+      const teams = [mockedTeam, mockedTeam, mockedTeam]
+
+      const queryBuilt = {
+        innerJoin: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        getMany: jest.fn().mockResolvedValueOnce(teams),
+      };
+
+      jest
+        .spyOn(teamsRepository, 'createQueryBuilder')
+        .mockReturnValue(queryBuilt as any);
+
+      const result = await service.getTeamsByLeagueId(leagueId);
+
+      expect(teamsRepository.createQueryBuilder).toHaveBeenCalledWith('team');
+      expect(queryBuilt.innerJoin).toHaveBeenCalledWith(
+        'team.competitions',
+        'competitions',
+      );
+      expect(queryBuilt.where).toHaveBeenCalledWith(
+        'competitions.id = :leagueId',
+        { leagueId },
+      );
+      expect(queryBuilt.getMany).toHaveBeenCalled();
+      expect(result).toEqual(teams);
+
+    });
+
+    it('should call coachesService.getCoachByTeamIds and retrieve the coach when there are no players in the team', async () => {
+      const teamId = 1;
+      const players = []
+
+      jest
+        .spyOn(playersService, 'getPlayersByTeamIds')
+        .mockResolvedValueOnce(players);
+
+      jest
+        .spyOn(coachesService, 'getCoachByTeamIds')
+        .mockResolvedValueOnce([mockedCoach]);
+
+      const result = await service.getPlayersOrCoachByTeamIds([teamId]);
+
+      expect(playersService.getPlayersByTeamIds).toHaveBeenCalledWith([teamId]);
+      expect(result).toEqual([mockedCoach]);
+    });
+  });
 });

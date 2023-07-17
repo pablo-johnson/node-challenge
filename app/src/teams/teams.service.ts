@@ -78,7 +78,7 @@ export class TeamsService {
   }
 
   async getPlayersOrCoachByTeamIds(teamIds: number[]): Promise<Player[] | Coach[]> {
-    this.logger.log("getPlayersOrCoachByTeamIds");
+    this.logger.log(`getPlayersOrCoachByTeamIds`);
     const players: Player[] = await this.playersService.getPlayersByTeamIds(teamIds);
     if (players != null && players.length > 0) {
       this.logger.log("found players")
@@ -87,6 +87,14 @@ export class TeamsService {
     this.logger.log("No players found");
     const coaches: Coach[] = await this.coachesService.getCoachByTeamIds(teamIds);
     return coaches;
+  }
+
+  async getTeamsByLeagueId(leagueId: number): Promise<Team[]> {
+    this.logger.log(`getTeamsByLeagueId: leagueId: ${leagueId}`);
+    return this.teamRepository.createQueryBuilder('team')
+      .innerJoin('team.competitions', 'competitions')
+      .where('competitions.id = :leagueId', { leagueId })
+      .getMany();
   }
 
 }

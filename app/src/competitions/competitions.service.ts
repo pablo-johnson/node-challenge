@@ -29,7 +29,7 @@ export class CompetitionsService {
     const competitionDto = { ...competitionInfo, areaName: competition.area.name };
     const savedCompetition = await this.competitionRepository.save(competitionDto);
     await this.teamService.saveTeams(teams, savedCompetition);
-
+    
   }
 
 

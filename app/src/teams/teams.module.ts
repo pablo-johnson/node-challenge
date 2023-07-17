@@ -9,6 +9,6 @@ import { TeamsResolver } from './teams.resolver';
 @Module({
   imports: [TypeOrmModule.forFeature([Team]), CoachesModule, PlayersModule],
   providers: [TeamsService, TeamsResolver],
-  exports: [TeamsService]
+  exports: [TeamsService, TeamsResolver]
 })
 export class TeamsModule { }

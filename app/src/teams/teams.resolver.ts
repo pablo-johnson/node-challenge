@@ -1,4 +1,4 @@
-import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Team } from './team.entity';
 import { TeamsService } from './teams.service';
 import { Player } from '../players/player.entity';
@@ -11,6 +11,11 @@ export class TeamsResolver {
   @Query(() => Team, { name: 'team', nullable: true })
   async getTeam(@Args('teamName', { type: () => String }) teamName: string) {
     return this.teamsService.getByName(teamName);
+  }
+
+  @Query(() => [Team], { name: 'teamsFromCompetition' })
+  teamsFromCompetition(@Args('leagueId', { type: () => Int }) leagueId: number) {
+    return this.teamsService.getTeamsByLeagueId(leagueId);
   }
 
   @ResolveField(() => [Player], { nullable: true })
