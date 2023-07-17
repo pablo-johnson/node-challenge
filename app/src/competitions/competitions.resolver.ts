@@ -4,6 +4,8 @@ import { CompetitionsService } from './competitions.service';
 import { Team } from '../teams/team.entity';
 import { TeamsResolver } from '../teams/teams.resolver';
 import { ImportResponse } from './import-response.entity';
+import { UseGuards } from '@nestjs/common';
+import { GqlThrottlerGuard } from '../utils/gql-throttler.guard';
 
 @Resolver(of => Competition)
 export class CompetitionsResolver {
@@ -13,6 +15,8 @@ export class CompetitionsResolver {
     private teamsResolver: TeamsResolver,
   ) { }
 
+
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => ImportResponse)
   importLeague(@Args('leagueCode', { type: () => String }) leagueCode: string) {
     return this.competitionsService.fetchLeagueWithTeamsAndPlayers(leagueCode);

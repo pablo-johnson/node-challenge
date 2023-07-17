@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CompetitionsResolver } from './competitions.resolver';
 import { TeamsResolver } from '../teams/teams.resolver';
 import { CompetitionsService } from './competitions.service';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 describe('CompetitionsResolver', () => {
   let resolver: CompetitionsResolver;
@@ -9,6 +10,12 @@ describe('CompetitionsResolver', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 10,
+        }),
+      ],
       providers: [
         CompetitionsResolver,
         {

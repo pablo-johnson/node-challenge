@@ -14,6 +14,7 @@ import { Player } from './players/player.entity';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -41,6 +42,10 @@ import { join } from 'path';
       driver: ApolloDriver,
       playground: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 15,
     }),
   ],
 })
