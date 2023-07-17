@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Competition } from './competition.entity';
 import { TeamsService } from '../teams/teams.service';
+import { PlayersService } from '../players/players.service';
+import { Player } from '../players/player.entity';
 
 
 @Injectable()
@@ -15,7 +17,8 @@ export class CompetitionsService {
     private readonly footballDataService: FootballDataService,
     @InjectRepository(Competition)
     private competitionRepository: Repository<Competition>,
-    private teamService: TeamsService,) { }
+    private teamService: TeamsService,
+    private playerService: PlayersService,) { }
 
   async fetchLeagueWithTeamsAndPlayers(leagueName: string) {
     this.logger.log("fetchLeagueWithTeamsAndPlayers called");
@@ -29,7 +32,23 @@ export class CompetitionsService {
     const competitionDto = { ...competitionInfo, areaName: competition.area.name };
     const savedCompetition = await this.competitionRepository.save(competitionDto);
     await this.teamService.saveTeams(teams, savedCompetition);
-    
+    return { success: true };
+  }
+
+  async getPlayersFromTeamsInLeague(leagueCode: string, teamName: string): Promise<Player[]> {
+    var filter: any;
+    if (teamName) {
+      filter = { code: leagueCode, teams: { name: teamName } };
+    } else {
+      filter = { code: leagueCode };
+    }
+    const league: Competition = await this.competitionRepository.findOne({
+      where: filter,
+      relations: ['teams'],
+    })
+    const teamIds = league.teams.map(team => { return team.id });
+    const players: Player[] = await this.playerService.getPlayersByTeamIds(teamIds);
+    return players;
   }
 
 

@@ -3,6 +3,7 @@ import { CompetitionsResolver } from './competitions.resolver';
 import { TeamsResolver } from '../teams/teams.resolver';
 import { CompetitionsService } from './competitions.service';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { mockedPlayer } from '../../test/mock-data';
 
 describe('CompetitionsResolver', () => {
   let resolver: CompetitionsResolver;
@@ -28,6 +29,7 @@ describe('CompetitionsResolver', () => {
           provide: CompetitionsService,
           useFactory: () => ({
             fetchLeagueWithTeamsAndPlayers: jest.fn(),
+            getPlayersFromTeamsInLeague: jest.fn(),
           }),
         },
       ],
@@ -47,12 +49,44 @@ describe('CompetitionsResolver', () => {
 
       jest
         .spyOn(competitionsService, 'fetchLeagueWithTeamsAndPlayers')
-        .mockResolvedValueOnce();
+        .mockResolvedValueOnce({ success: true });
 
       const result = await resolver.importLeague(leagueCode);
 
       expect(competitionsService.fetchLeagueWithTeamsAndPlayers).toHaveBeenCalledWith(leagueCode);
-      expect(result).toEqual(undefined);
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  describe('getPlayersFromTeamsInLeague', () => {
+    it('should call competitionsService.getPlayersFromTeamsInLeague and retrieve all the players from this league', async () => {
+      const leagueCode = 'PL';
+      const players = [mockedPlayer, mockedPlayer, mockedPlayer]
+
+      jest
+        .spyOn(competitionsService, 'getPlayersFromTeamsInLeague')
+        .mockResolvedValueOnce(players);
+
+      const result = await resolver.players(leagueCode);
+
+      expect(competitionsService.getPlayersFromTeamsInLeague).toHaveBeenCalledWith(leagueCode, undefined);
+      expect(result).toEqual(players);
+    });
+
+
+    it('should call competitionsService.getPlayersFromTeamsInLeague and retrieve all the players from this league and the team specified', async () => {
+      const leagueCode = 'PL';
+      const teamName = 'Arsenal FC';
+      const players = [mockedPlayer, mockedPlayer, mockedPlayer]
+
+      jest
+        .spyOn(competitionsService, 'getPlayersFromTeamsInLeague')
+        .mockResolvedValueOnce(players);
+
+      const result = await resolver.players(leagueCode, teamName);
+
+      expect(competitionsService.getPlayersFromTeamsInLeague).toHaveBeenCalledWith(leagueCode, teamName);
+      expect(result).toEqual(players);
     });
   });
 });

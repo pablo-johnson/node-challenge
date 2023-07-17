@@ -71,6 +71,7 @@ type ImportResponse {
 }
 
 type Query {
+  players(leagueCode: String!, teamName: String): [Player!]!
   team(teamName: String!): Team
   teamsFromCompetition(leagueId: Int!): [Team!]!
 }

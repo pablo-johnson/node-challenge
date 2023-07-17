@@ -38,7 +38,8 @@ export class PlayersService {
     const players: Player[] = await this.playerRepository.find({
       where: {
         team: { id: In(teamIds) }
-      }
+      },
+      relations: ["team"]
     })
     return players;
   }

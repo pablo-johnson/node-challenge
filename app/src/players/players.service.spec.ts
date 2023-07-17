@@ -73,7 +73,10 @@ describe('PlayersService', () => {
       const result = await service.getPlayersByTeamIds([teamId]);
 
       expect(playersRepository.find).toBeCalledWith(
-        { where: { team: { id: In([teamId]) } } }
+        {
+          where: { team: { id: In([teamId]) } },
+          relations: ["team"]
+        }
       );
       expect(result).toEqual([mockedPlayer, mockedPlayer, mockedPlayer])
     })
