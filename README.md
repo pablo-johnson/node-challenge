@@ -9,8 +9,6 @@
 
 ## Description
 
-Santex Back-end Developer Hiring Test
-
 The goal is to create a project that exposes an API built with GraphQL, with a mutation and some queries.
 
 ## Prerequisites
